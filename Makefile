@@ -6,7 +6,7 @@
 #    By: emamenko <emamenko@student.42.us.org>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/20 11:27:05 by emamenko          #+#    #+#              #
-#    Updated: 2019/03/23 21:31:29 by emamenko         ###   ########.fr        #
+#    Updated: 2019/03/23 22:56:13 by emamenko         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 .PHONY:		$(NAME) all clean fclean re reclean del reexec
 
 NAME	=	ft_ls
-SOURCES	=	ft_ls.c
+SOURCES	=	ft_ls.c params.c error.c
 DEBUG	=	-g -fsanitize=address
 
 all:		$(NAME)

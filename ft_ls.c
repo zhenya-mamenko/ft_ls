@@ -6,28 +6,77 @@
 /*   By: emamenko <emamenko@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 21:31:45 by emamenko          #+#    #+#             */
-/*   Updated: 2019/03/23 21:51:02 by emamenko         ###   ########.fr       */
+/*   Updated: 2019/03/23 23:23:44 by emamenko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	error(char *message, int and_exit, int and_free)
+int			g_exit_value = 0;
+
+static DIR	*open_dir(char *name)
 {
-	ft_printf("%s: %s", NAME, message);
-	if (and_free == 1)
-		free(message);
-	if (and_exit == 1)
-		exit(1);
+	DIR		*dirp;
+
+	dirp = opendir(name);
+	if (dirp == NULL)
+		file_error(name);
+	return (dirp);
 }
 
-int		main(int ac, char **av)
+static void	close_dir(DIR *dirp, char *name)
+{
+	if (closedir(dirp) != 0)
+		file_error(name);
+}
+
+static void	ls_dir(DIR *dirp, size_t f, char *name)
+{
+	struct dirent	*ep;
+
+	if (name != NULL)
+		ft_printf("%s:\n", name);
+	while ((ep = readdir(dirp)))
+	{
+		ft_printf("%s\n", ep->d_name);
+	}
+	if (f)
+		;
+}
+
+static void	process_dir(char *name, size_t f, int show_name)
+{
+	DIR		*dirp;
+
+	dirp = open_dir(name);
+	if (dirp != NULL)
+	{
+		ls_dir(dirp, f, show_name == 1 ? name : NULL);
+		close_dir(dirp, name);
+	}
+}
+
+int			main(int ac, char **av)
 {
 	int		cnt;
+	int		i;
 	size_t	f;
 
 	cnt = ac - 1;
 	f = 0;
 	if (cnt != 0)
-		f = process_params(&cnt, av + 1);
+		f = check_params(&cnt, av + 1);
+	if (cnt == 0)
+		process_dir(".", f, 0);
+	else
+	{
+		i = -1;
+		while (++i < cnt)
+		{
+			process_dir(av[ac - cnt + i], f, cnt == 1 ? 0 : 1);
+			if (cnt != 1)
+				ft_printf("\n");
+		}
+	}
+	return (g_exit_value);
 }
