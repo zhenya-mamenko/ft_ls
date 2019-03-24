@@ -6,7 +6,7 @@
 /*   By: emamenko <emamenko@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 21:34:48 by emamenko          #+#    #+#             */
-/*   Updated: 2019/03/24 14:32:11 by emamenko         ###   ########.fr       */
+/*   Updated: 2019/03/24 15:22:53 by emamenko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,5 @@ void				print_data(size_t f, int cnt);
 void				print_l(t_file *a, t_file *n, int ix);
 void				sort_array(t_file *a, size_t f);
 void				colorize(t_file file);
-char				*readlnk(const char *filename);
 
 #endif

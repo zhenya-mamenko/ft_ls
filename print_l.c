@@ -6,7 +6,7 @@
 /*   By: emamenko <emamenko@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 09:44:46 by emamenko          #+#    #+#             */
-/*   Updated: 2019/03/24 14:50:04 by emamenko         ###   ########.fr       */
+/*   Updated: 2019/03/24 14:56:01 by emamenko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ static char	get_x_attr(char *name)
 	xattr = listxattr(name, NULL, 0, XATTR_NOFOLLOW);
 	if (xattr < 0)
 		xattr = 0;
-
 	if (xattr > 0)
 		a = '@';
 	else if (acl != NULL)

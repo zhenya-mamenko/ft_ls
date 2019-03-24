@@ -6,7 +6,7 @@
 /*   By: emamenko <emamenko@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 03:24:00 by emamenko          #+#    #+#             */
-/*   Updated: 2019/03/24 13:45:19 by emamenko         ###   ########.fr       */
+/*   Updated: 2019/03/24 15:06:49 by emamenko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,24 @@ extern t_dir	*g_dir;
 extern t_file	*g_root;
 size_t			g_flags;
 
-static void		print_columns(t_file *a, t_file *n, int ix)
+static void		get_rc(t_dir *dir, size_t *rows, size_t *cols)
 {
 	struct winsize	w;
+
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	if ((*cols = w.ws_col / (dir->max_len + 1)) == 0)
+		*cols = 1;
+	*rows = (dir->files_cnt2 / *cols) +
+		((dir->files_cnt2 % *cols) == 0 ? 0 : 1);
+	if ((g_flags & 64) || (*rows > w.ws_row))
+	{
+		*rows = dir->files_cnt2;
+		*cols = 1;
+	}
+}
+
+static void		print_columns(t_file *a, t_file *n, int ix)
+{
 	t_dir			*dir;
 	size_t			cols;
 	size_t			rows;
@@ -27,15 +42,7 @@ static void		print_columns(t_file *a, t_file *n, int ix)
 	size_t			k;
 
 	dir = get_dir(&g_dir, n->path);
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	if ((cols = w.ws_col / (dir->max_len + 1)) == 0)
-		cols = 1;
-	rows = (dir->files_cnt2 / cols) + ((dir->files_cnt2 % cols) == 0 ? 0 : 1);
-	if (g_flags & 64)
-	{
-		rows = dir->files_cnt2;
-		cols = 1;
-	}
+	get_rc(dir, &rows, &cols);
 	i = 0;
 	k = -1;
 	while (++k < dir->files_cnt && i < dir->files_cnt2)
